@@ -1,0 +1,34 @@
+version: "3.8"
+
+services:
+<% for (const service of services) { -%>
+  <%= service.name %>:
+    image: <%= service.image %>
+    <% if (service.port) { %>
+    ports:
+      - "<%= service.port %>:<%= service.port %>"
+    <% } %>
+    <% if (service.volumes?.length) { %>
+    volumes:
+      <% service.volumes.forEach(volume => { %>
+      - <%= volume %>
+      <% }) %>
+    <% } %>
+    <% if (service.env) { %>
+    environment:
+      <% Object.entries(service.env).forEach(([key, val]) => { %>
+        <% if (secretManager.isSecret(val)) { %>
+        <%= key %>: ${SECRET_<%= secretManager.extractKey(val).toUpperCase() %>}
+        <% } else { %>
+        <%= key %>: "<%= val %>"
+        <% } %>
+      <% }) %>
+    <% } %>
+    <% if (service.depends_on?.length) { %>
+    depends_on:
+      <% service.depends_on.forEach(dep => { %>
+      - <%= dep %>
+      <% }) %>
+    <% } %>
+    restart: unless-stopped
+<% } -%>

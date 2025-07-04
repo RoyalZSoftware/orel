@@ -1,0 +1,27 @@
+{
+  "name": "orel",
+  "version": "0.0.1",
+  "type": "module",
+  "main": "index.js",
+  "directories": {
+    "example": "examples",
+    "lib": "lib"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "bin": "bin",
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "dependencies": {
+    "commander": "^13.1.0",
+    "ejs": "^3.1.10",
+    "node-ssh": "^13.2.1",
+    "ssh2-sftp-client": "^12.0.1"
+  },
+  "devDependencies": {
+    "jest": "^30.0.4"
+  }
+}

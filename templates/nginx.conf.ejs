@@ -1,0 +1,26 @@
+# Redirect all traffic to HTTPS
+server {
+  listen 80;
+  server_name <% app.services.forEach(service => { %><%= service.subdomain %>.<%= app.domain %> <% }) %>;
+  return 301 https://$host$request_uri;
+}
+
+<% app.services.filter(c => !!c.nginx?.subdomain || c.nginx?.subdomain == "").forEach(service => { %>
+server {
+  listen 443 ssl;
+  <% if (service.nginx.subdomain != "") {%>
+  server_name <%= service.nginx.subdomain %>.<%= app.domain %>;
+  <% } else { %>
+  server_name <%= app.domain %>;
+  <% } %>
+
+  ssl_certificate /etc/letsencrypt/live/<%= service.subdomain %>.<%= app.domain %>/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/<%= service.subdomain %>.<%= app.domain %>/privkey.pem;
+
+  location / {
+    proxy_pass http://<%= service.name %>:<%= service.port %>;
+    proxy_set_header Host $host;
+    proxy_set_header X-Real-IP $remote_addr;
+  }
+}
+<% }) %>
