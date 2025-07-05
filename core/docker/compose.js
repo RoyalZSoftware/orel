@@ -35,7 +35,7 @@ export async function generateComposeFile(
         services: config.services.map(c => {
             if (c.dockerfile) {
                 delete c.dockerfile;
-                return {...c, image: dockerImageName(config.containerRegistry, c.name, "latest") };
+                return {...c, image: dockerImageName(config.containerRegistry, c.name, config.tag) };
             }
 
             return c;

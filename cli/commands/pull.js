@@ -37,7 +37,7 @@ export const pull = async (options) => {
   }
 
   await Promise.all(
-    config.services.filter(c => !!c.dockerfile).map((c) => pullImage(config.containerRegistry, c.name, "latest"))
+    config.services.filter(c => !!c.dockerfile).map((c) => pullImage(config.containerRegistry, c.name, config.tag))
   );
 
   await down();

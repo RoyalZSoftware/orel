@@ -7,6 +7,7 @@ import {
 } from "../dsl/index.js";
 
 export default defineApp({
+  tag: "latest",
   domain: "rebrandbox.com",
   containerRegistry: useGitHubRegistry("royalzsoftware/rebrandbox"),
   database: mongoDB(),

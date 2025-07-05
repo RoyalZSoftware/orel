@@ -6,9 +6,9 @@ export function dockerImageName(registry, name, version) {
 
 export async function buildAndPushImage(registry, name, version, context) {
     const imageName = dockerImageName(registry, name, version);
-    await sh(`docker build -t ${imageName} -f ${context.dockerfile}`);
+    console.log(await sh(`docker build -t ${imageName} -f ${context.dockerfile} ${context.cwd}`));
 
-    await sh(`docker push ${imageName}`);
+    console.log(await sh(`docker push ${imageName}`));
 }
 
 export async function pullImage(registry, name, version) {

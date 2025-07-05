@@ -38,10 +38,11 @@ export function volume(name, path) {
   return `${name}:${path}`;
 }
 
-export function defineApp({ domain, services, containerRegistry, database }) {
+export function defineApp({ domain, services, containerRegistry, database, tag }) {
   return {
+    tag,
     domain,
-    services: [database.service, ...(typeof services == "function" ? services(database.dbConfiguration) : services)].filter(c => !!c),
+    services: [database.service, ...(typeof services == "function" ? services(database.dbConfiguration) : [services])].filter(c => !!c),
     containerRegistry,
     volumes,
   };
@@ -107,10 +108,6 @@ export async function buildConfig(configPath) {
       console.error("Creating orel.json failed with error", err);
       throw err;
     });
-}
-
-export function findDockerBuildTasks(config) {
-  return config.services.filter(c => c.type == "docker" && !!c.dockerfile && c.image == undefined);
 }
 
 export function useGitHubRegistry(repository) {
