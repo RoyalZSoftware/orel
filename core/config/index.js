@@ -34,5 +34,5 @@ const cleaned = rendered
 
 
 export async function restart() {
-    return sh('service nginx restart');
+    return sh('service nginx restart || true');
 }

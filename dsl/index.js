@@ -48,6 +48,36 @@ export function defineApp({ domain, services, containerRegistry, database, tag }
   };
 }
 
+export function postgresDB() {
+  const dbConfiguration = {
+    host: "db",
+    port: 5432,
+    database: "main",
+    user: "database_user",
+    password: secret("db"),
+  };
+
+  const service = defineService({
+    name: dbConfiguration.host,
+    type: "docker",
+    image: "postgres:16",
+    volumes: [
+      volume("psql_db_data", "/var/lib/postgresql/data")
+    ],
+    env: {
+      POSTGRES_USER: dbConfiguration.user,
+      POSTGRES_PASSWORD: dbConfiguration.password,
+      POSTGRES_DB: dbConfiguration.database,
+    },
+    backup: true,
+  });
+
+  return {
+    dbConfiguration,
+    service
+  };
+}
+
 export function mongoDB() {
   const dbConfiguration = {
     host: "db",
@@ -61,7 +91,7 @@ export function mongoDB() {
     type: "docker",
     image: "mongo:6",
     volumes: [
-      volume("db_data", "/data/db")
+      volume("mongo_db_data", "/data/db")
     ],
     env: {
       USER: dbConfiguration.user,

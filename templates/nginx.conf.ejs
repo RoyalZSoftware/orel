@@ -1,7 +1,7 @@
 # Redirect all traffic to HTTPS
 server {
   listen 80;
-  server_name <% app.services.forEach(service => { %><%= service.subdomain %>.<%= app.domain %> <% }) %>;
+  server_name <% app.services.map(c => !!c.nginx?.subdomain || c.nginx?.subdomain == "").forEach(service => { %><%= service.nginx?.subdomain %>.<%= app.domain %> <% }) %>;
   return 301 https://$host$request_uri;
 }
 

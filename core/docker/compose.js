@@ -1,10 +1,14 @@
 import fs from "fs";
+import { fileURLToPath } from 'url';
 import path from "path";
 import ejs from "ejs";
 import { sh } from "../utils/sh.js";
 import { Config } from "../../init/config.js";
 import { dockerImageName } from "./builder.js";
 import { FSSecretManager } from "../secrets/fsadapter.js";
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 /**
  * Generates a docker-compose.yml from config using EJS template.
@@ -15,7 +19,7 @@ export async function generateComposeFile(
   config,
   outputPath = "docker-compose.yml"
 ) {
-  const templatePath = path.resolve("./templates/docker-compose.yml.ejs");
+  const templatePath = path.resolve(path.join(__dirname, "/../../templates/docker-compose.yml.ejs"));
   const template = fs.readFileSync(templatePath, "utf-8");
   const secretManager = FSSecretManager(Config.FS_SECRET_STORE_PATH);
 
@@ -56,13 +60,13 @@ const cleaned = content
 }
 
 export async function down() {
-  return sh(`docker compose down -f ${Config.DOCKER_COMPOSE_FILE}`);
+  return sh(`docker compose -f ${Config.DOCKER_COMPOSE_FILE} down || true`);
 }
 
 export async function up(pull) {
   return sh(
-    `docker compose up -d -f ${Config.DOCKER_COMPOSE_FILE} ${
+    `docker compose -f ${Config.DOCKER_COMPOSE_FILE} ${
       pull ? "--pull" : ""
-    }`
+    } up -d`
   );
 }

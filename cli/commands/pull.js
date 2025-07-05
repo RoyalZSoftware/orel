@@ -5,7 +5,6 @@ import { down, generateComposeFile, up } from "../../core/docker/compose.js";
 import { Config } from "../../init/config.js";
 import { generateNginxConfig, restart } from "../../core/config/index.js";
 import { join, resolve } from "node:path";
-import { ensureRootAccess } from "../../init/system.js";
 import { FSSecretManager } from "../../core/secrets/fsadapter.js";
 
 const getCertificates = async (config) => {
@@ -40,7 +39,8 @@ export const pull = async (options) => {
     config.services.filter(c => !!c.dockerfile).map((c) => pullImage(config.containerRegistry, c.name, config.tag))
   );
 
-  await down();
+  console.log("Running down");
+  console.log(await down());
 
   await FSSecretManager(Config.FS_SECRET_STORE_PATH).resolveSecrets(config);
 
@@ -48,5 +48,6 @@ export const pull = async (options) => {
   await generateNginxConfig(config, resolve(Config.NGINX_CONFIG_FILE));
   await restart()
 
-  await up();
+  console.log("Running up");
+  console.log(await up());
 };
