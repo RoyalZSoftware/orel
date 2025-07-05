@@ -6,6 +6,7 @@ import { Config } from "../../init/config.js";
 import { generateNginxConfig, restart } from "../../core/config/index.js";
 import { join, resolve } from "node:path";
 import { ensureRootAccess } from "../../init/system.js";
+import { FSSecretManager } from "../../core/secrets/fsadapter.js";
 
 const getCertificates = async (config) => {
   const domain = config.domain;
@@ -40,6 +41,8 @@ export const pull = async (options) => {
   );
 
   await down();
+
+  await FSSecretManager(Config.FS_SECRET_STORE_PATH).resolveSecrets(config);
 
   await generateComposeFile(config, resolve(Config.DOCKER_COMPOSE_FILE));
   await generateNginxConfig(config, resolve(Config.NGINX_CONFIG_FILE));

@@ -22,7 +22,7 @@ export class SecretManager {
       return Promise.all(obj.map((item) => this.resolveSecrets(item)));
     } else if (obj && typeof obj === "object") {
       const entries = Object.entries(obj).map(async ([k, v]) => [k, await this.resolveSecrets(v)])
-      return Promise.all(Object.fromEntries(entries));
+      return Object.fromEntries(entries);
     } else if (this.isSecret(obj)) {
       const key = this.extractKey(obj);
       const secretValue = this.getSecret(key);
