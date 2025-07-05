@@ -32,3 +32,11 @@ services:
     <% } %>
     restart: unless-stopped
 <% } -%>
+
+
+<% if (volumes?.length > 0) { -%>
+volumes:
+  <% volumes.forEach((volume) => { %>
+  <%= volume %>:
+  <% }) %>
+<% } %>

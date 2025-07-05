@@ -29,26 +29,64 @@ export function defineService({
   };
 }
 
-export function defineApp({ domain, services, containerRegistry }) {
+export const ROOT_DOMAIN = "";
+
+let volumes = [];
+
+export function volume(name, path) {
+  volumes.push(name);
+  return `${name}:${path}`;
+}
+
+export function defineApp({ domain, services, containerRegistry, database }) {
   return {
     domain,
-    services,
+    services: [database.service, ...(typeof services == "function" ? services(database.dbConfiguration) : services)].filter(c => !!c),
     containerRegistry,
+    volumes,
   };
 }
 
-export function useMongo({ name, user, password, database }) {
-  return defineService({
-    name: name,
+export function mongoDB() {
+  const dbConfiguration = {
+    host: "db",
+    port: 27017,
+    database: "main",
+    user: "database_user",
+    password: secret("db"),
+  };
+  const service = defineService({
+    name: dbConfiguration.host,
     type: "docker",
     image: "mongo:6",
-    volumes: ["/data/db"],
+    volumes: [
+      volume("db_data", "/data/db")
+    ],
     env: {
-      USER: user,
-      PASSWORD: password,
-      DATABASE: database,
+      USER: dbConfiguration.user,
+      PASSWORD: dbConfiguration.password,
+      DATABASE: dbConfiguration.database,
     },
     backup: true,
+  });
+
+  return {
+    dbConfiguration,
+    service
+  };
+}
+
+export function flywayMigrations(db) {
+  return defineService({
+    name: "flyway",
+    type: "docker",
+    image: "flyway/flyway",
+    env: {
+      HOST: db.host,
+      USER: db.user,
+      PASSWORD: db.password,
+      DATABASE: db.database
+    }
   });
 }
 

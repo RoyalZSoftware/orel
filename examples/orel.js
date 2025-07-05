@@ -1,15 +1,17 @@
-import { defineApp, defineService, secret, useGitHubRegistry, useMongo } from "../dsl/index.js";
+import {
+  defineApp,
+  defineService,
+  flywayMigrations,
+  mongoDB,
+  useGitHubRegistry,
+} from "../dsl/index.js";
 
 export default defineApp({
   domain: "rebrandbox.com",
-  containerRegistry: useGitHubRegistry('royalzsoftware/rebrandbox'),
-  services: [
-    useMongo({
-      name: "db",
-      user: "app",
-      database: "app",
-      password: secret("db"),
-    }),
+  containerRegistry: useGitHubRegistry("royalzsoftware/rebrandbox"),
+  database: mongoDB(),
+  services: (db) => ([
+    flywayMigrations(db),
     defineService({
       name: "api",
       type: "docker",
@@ -20,17 +22,12 @@ export default defineApp({
         subdomain: "api",
       },
       env: {
-        DB_HOST: "db",
-        DB_USER: "app",
-        DB_PASSWORD: secret("db"),
-        DB_DATABASE: "rebrandbox",
-      },
-      migrate: {
-        type: "flyway",
-        path: "./services/api/migrations",
-      },
+        DB_HOST: db.host,
+        DB_USER: db.user,
+        DB_PASSWORD: db.password,
+        DB_DATABASE: db.database,
+      }
     }),
-
     defineService({
       name: "app",
       type: "docker",
@@ -42,15 +39,5 @@ export default defineApp({
         spa: true, // enable history fallback
       },
     }),
-
-    defineService({
-      name: "landing",
-      type: "docker",
-      dockerfile: "./services/landing/Dockerfile",
-      path: "./landing",
-      nginx: {
-        subdomain: "", // main domain
-      },
-    }),
-  ],
+  ]),
 });

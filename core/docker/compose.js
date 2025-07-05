@@ -29,6 +29,7 @@ export async function generateComposeFile(
     .render(
       template,
       {
+        volumes: config.volumes,
         secretManager,
         secrets,
         services: config.services.map(c => {
