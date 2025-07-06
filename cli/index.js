@@ -22,8 +22,8 @@ program
 .command('pull')
 .description("Pulls the latest containers and rebuilds nginx config and docker-compose.yml")
 .option("-c, --config <path>", "Path to the orel.json deployment configuration file.", `/home/${Config.DEPLOYER_USERNAME}/orel.json`)
-.option("-u, --username", "Docker username")
-.option("-p, --password", "Docker password")
+.option("-u, --username <username>", "Docker username")
+.option("-p, --password <password>", "Docker password")
 .action(async (options) => {
     return pull(options);
 });

@@ -6,7 +6,7 @@ const setupUser = async (username) => {
 };
 
 const ALLOWED_CALLS_FOR_DEPLOY_USER = [
-  "/usr/local/bin/orel pull",
+  "/usr/bin/orel pull",
 ];
 
 export async function setupDeployUser() {

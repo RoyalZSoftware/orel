@@ -6,6 +6,7 @@ import { Config } from "../../init/config.js";
 import { generateNginxConfig, restart } from "../../core/config/index.js";
 import { join, resolve } from "node:path";
 import { FSSecretManager } from "../../core/secrets/fsadapter.js";
+import { ensureRootAccess } from "../../init/system.js";
 
 const getCertificates = async (config) => {
   const domain = config.domain;
