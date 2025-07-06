@@ -13,14 +13,9 @@ const sync = async (host, config) => {
 
   writeFileSync(join(tmpdir(), "orel.json"), configStr, { encoding: "utf8" });
 
-  const userGiven = host.split("@").length > 1;
-
-  const hostname = host.split("@")[1];
-  const username = host.split("@")[0];
-
   const client = new RemoteClient({
-    host: userGiven ? host : hostname,
-    username: userGiven ? username : Config.DEPLOYER_USERNAME,
+    host: host,
+    username: Config.DEPLOYER_USERNAME,
     port: 22,
   });
 
