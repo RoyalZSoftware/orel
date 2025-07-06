@@ -6,7 +6,7 @@ import {
   secret,
   SPA_ROUTING_ENABLED,
   useGitHubRegistry,
-} from "../dsl";
+} from "@royalzsoftware/orel";
 
 export default defineApp({
   domain: "example.com",
