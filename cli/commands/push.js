@@ -2,7 +2,7 @@ import { RemoteClient } from "../../core/ssh/remoteClient.js";
 import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { buildAndPushImage } from "../../core/docker/builder.js";
-import { join } from "node:path";
+import { join, resolve } from "node:path";
 import { getConfig } from "../utils/getConfig.js";
 import { Config } from "../../init/config.js";
 
@@ -40,9 +40,8 @@ export const push = async (host, options) => {
   console.log(dockerTasks);
 
   for (const task of dockerTasks) {
-    console.log(task);
     await buildAndPushImage(config.containerRegistry, task.name, config.tag, {
-      cwd: task.path,
+      cwd: join(resolve(process.cwd(), options.config), "..", task.path),
       dockerfile: task.dockerfile,
     });
   }

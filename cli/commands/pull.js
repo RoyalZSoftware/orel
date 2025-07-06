@@ -24,7 +24,7 @@ const getCertificates = async (config) => {
 
 export const pull = async (options) => {
   ensureRootAccess();
-  const configFile = join(process.cwd(), options.config);
+  const configFile = resolve(process.cwd(), options.config);
   if (!existsSync(configFile)) {
     throw new Error("Config file not found. " + configFile);
   }
