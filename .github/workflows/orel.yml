@@ -17,4 +17,5 @@ jobs:
         with:
           ssh_host: ${{secrets.SSH_HOST}}
           ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          orel_path: examples/minimal/orel.js
           github_token: ${{secrets.GITHUB_TOKEN}}

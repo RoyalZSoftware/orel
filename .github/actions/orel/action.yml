@@ -3,7 +3,7 @@ description: "Build & deploy your project to a remote server with @royalzsoftwar
 inputs:
   orel_path:
     required: false
-    default: "/home/deployer/orel.json"
+    default: "./orel.config.js"
     description: "The path to the orel.config.js"
   ssh_host:
     required: true
