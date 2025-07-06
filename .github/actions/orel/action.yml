@@ -51,7 +51,7 @@ runs:
     - name: Build and push image
       shell: bash
       run: |
-        orel push -c ${{ inputs.orel_path }} ${{ inputs.ssh_user }}@${{ inputs.ssh_host }}
+        orel push -c ${{ inputs.orel_path }} ${{ inputs.ssh_host }}
     - name: Deploy via SSH
       shell: bash
       run: |
