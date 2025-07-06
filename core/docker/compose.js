@@ -1,6 +1,6 @@
-import fs from "fs";
+import fs, { mkdirSync } from "fs";
 import { fileURLToPath } from 'url';
-import path from "path";
+import path, { join, resolve } from "path";
 import ejs from "ejs";
 import { sh } from "../utils/sh.js";
 import { Config } from "../../init/config.js";
@@ -19,6 +19,7 @@ export async function generateComposeFile(
   config,
   outputPath = "docker-compose.yml"
 ) {
+  mkdirSync(join(resolve(process.cwd(), DOCKER_COMPOSE_FILE), ".."), {recursive: true});
   const templatePath = path.resolve(path.join(__dirname, "/../../templates/docker-compose.yml.ejs"));
   const template = fs.readFileSync(templatePath, "utf-8");
   const secretManager = FSSecretManager(Config.FS_SECRET_STORE_PATH);

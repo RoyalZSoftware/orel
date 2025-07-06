@@ -20,6 +20,5 @@ export async function buildAndPushImage(registry, name, version, context) {
  */
 export async function pullImage(registry, name, version) {
     const imageName = dockerImageName(registry, name, version);
-    const dockerConfigPath = `/home/${Config.DEPLOYER_USERNAME}/.docker`;
-    await sh(`DOCKER_CONFIG=${dockerConfigPath} docker pull ${imageName}`);
+    await sh(`docker pull ${imageName}`);
 }

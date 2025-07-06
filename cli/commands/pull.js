@@ -4,9 +4,10 @@ import { pullImage } from "../../core/docker/builder.js";
 import { down, generateComposeFile, login, up } from "../../core/docker/compose.js";
 import { Config } from "../../init/config.js";
 import { generateNginxConfig, restart } from "../../core/config/index.js";
-import { resolve } from "node:path";
+import { join, resolve } from "node:path";
 import { FSSecretManager } from "../../core/secrets/fsadapter.js";
 import { ensureRootAccess } from "../../init/system.js";
+import { sh } from "../../core/utils/sh.js";
 
 const getCertificates = async (config) => {
   const domain = config.domain;
@@ -50,11 +51,15 @@ export const pull = async (options) => {
   console.log("Running down");
   console.log(await down());
 
-  await FSSecretManager(Config.FS_SECRET_STORE_PATH).resolveSecrets(config);
+  await FSSecretManager(resolve(Config.FS_SECRET_STORE_PATH)).resolveSecrets(config);
 
   await generateComposeFile(config, resolve(Config.DOCKER_COMPOSE_FILE));
   await generateNginxConfig(config, resolve(Config.NGINX_CONFIG_FILE));
   await restart()
+
+  const orelPath = join(resolve(Config.DOCKER_COMPOSE_FILE), "..");
+  await sh(`chown -R root ${orelPath}`);
+  await sh(`chmod 700 ${orelPath}`);
 
   console.log("Running up");
   console.log(await up());
