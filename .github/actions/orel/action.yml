@@ -46,7 +46,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ inputs.GITHUB_TOKEN }}
+        password: ${{ inputs.github_token }}
 
     - name: Build and push image
       shell: bash
@@ -56,5 +56,5 @@ runs:
       shell: bash
       run: |
         ssh -o StrictHostKeyChecking=no ${{ inputs.ssh_user }}@${{ inputs.ssh_host }} << EOF
-          sudo orel pull -c /home/${{ inputs.ssh_user }} -u ${{github.actor}} -p ${{secrets.GITHUB_TOKEN}}
+          sudo orel pull -c /home/${{ inputs.ssh_user }} -u ${{github.actor}} -p ${{inputs.github_token}}
         EOF
