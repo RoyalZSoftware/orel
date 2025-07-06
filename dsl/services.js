@@ -31,7 +31,6 @@ function defineService({
   return {
     image,
     name,
-    type,
     volumes,
     dockerfile,
     env,
@@ -49,7 +48,7 @@ export function internalService(service) {
 }
 
 export const SPA_ROUTING_ENABLED = true;
-export const SPA_ROUTING_DISBALED = true;
+export const SPA_ROUTING_DISBALED = false;
 
 /**
  * @param {Omit<ServiceDefinition, "nginx">} service
