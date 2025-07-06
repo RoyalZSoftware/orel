@@ -4,6 +4,7 @@ import { tmpdir } from "node:os";
 import { buildAndPushImage } from "../../core/docker/builder.js";
 import { join } from "node:path";
 import { getConfig } from "../utils/getConfig.js";
+import { Config } from "../../init/config.js";
 
 const sync = async (host, config) => {
   const configStr = JSON.stringify(config);
@@ -12,15 +13,20 @@ const sync = async (host, config) => {
 
   writeFileSync(join(tmpdir(), "orel.json"), configStr, { encoding: "utf8" });
 
+  const userGiven = host.split("@").length > 1;
+
+  const hostname = host.split("@")[1];
+  const username = host.split("@")[0];
+
   const client = new RemoteClient({
-    host,
-    username: "root",
+    host: userGiven ? host : hostname,
+    username: userGiven ? username : Config.DEPLOYER_USERNAME,
     port: 22,
   });
 
   await client.connect();
 
-  await client.uploadFile(join(tmpdir(), "orel.json"), "/root/orel.json");
+  await client.uploadFile(join(tmpdir(), "orel.json"), `/home/${Config.DEPLOYER_USERNAME}/orel.json`);
 
   console.log(`Successfully synchronized with ${host}`);
 

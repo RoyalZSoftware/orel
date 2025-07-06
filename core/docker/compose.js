@@ -70,3 +70,7 @@ export async function up(pull) {
     } up -d`
   );
 }
+
+export async function login(registry, username, password) {
+  return sh(`echo ${password} | docker login ${registry} -u ${username} --password-stdin`);
+}

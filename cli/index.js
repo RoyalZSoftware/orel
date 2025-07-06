@@ -3,6 +3,7 @@ import { initServer } from "../init/setup.js";
 import pkg from '../package.json' with { type: 'json' };
 import { push } from "./commands/push.js";
 import { pull } from "./commands/pull.js";
+import { Config } from "../init/config.js";
 
 program
 .name("orel")
@@ -20,7 +21,9 @@ program
 program
 .command('pull')
 .description("Pulls the latest containers and rebuilds nginx config and docker-compose.yml")
-.option("-c, --config <path>", "Path to the orel.json deployment configuration file.", "/root/orel.json")
+.option("-c, --config <path>", "Path to the orel.json deployment configuration file.", `/home/${Config.DEPLOYER_USERNAME}/orel.json`)
+.option("-u, --username", "Docker username")
+.option("-p, --password", "Docker password")
 .action(async (options) => {
     return pull(options);
 });

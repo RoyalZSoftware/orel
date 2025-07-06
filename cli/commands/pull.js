@@ -1,7 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
 import { requestCertificates } from "../../core/letsencrypt/index.js";
 import { pullImage } from "../../core/docker/builder.js";
-import { down, generateComposeFile, up } from "../../core/docker/compose.js";
+import { down, generateComposeFile, login, up } from "../../core/docker/compose.js";
 import { Config } from "../../init/config.js";
 import { generateNginxConfig, restart } from "../../core/config/index.js";
 import { join, resolve } from "node:path";
@@ -22,12 +22,17 @@ const getCertificates = async (config) => {
 };
 
 export const pull = async (options) => {
-    // ensureRootAccess();
+  ensureRootAccess();
   const configFile = join(process.cwd(), options.config);
   if (!existsSync(configFile)) {
     throw new Error("Config file not found. " + configFile);
   }
   const config = JSON.parse(readFileSync(configFile, { encoding: "utf8" }));
+  const containerRegistryDomain = config.containerRegistry.split("/")[0];
+
+  if (options.username && options.password) {
+    await login(containerRegistryDomain, options.username, options.password);
+  }
 
   try {
   } catch(e) {

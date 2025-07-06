@@ -6,7 +6,6 @@ const setupUser = async (username) => {
 };
 
 const ALLOWED_CALLS_FOR_DEPLOY_USER = [
-  "/usr/local/bin/docker-compose",
   "/usr/local/bin/orel pull",
 ];
 
