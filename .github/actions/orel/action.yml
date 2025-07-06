@@ -1,4 +1,4 @@
-name: "Orel Deploy"
+name: "orel"
 description: "Build & deploy your project to a remote server with @royalzsoftware/orel"
 inputs:
   orel_path:
