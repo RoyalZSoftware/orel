@@ -15,6 +15,9 @@ inputs:
   ssh_private_key:
     description: "Key to sign in via ssh"
     required: true
+  github_token:
+    description: "The github token needed to push to docker"
+    required: true
 runs:
   using: "composite"
   steps:
@@ -43,7 +46,7 @@ runs:
       with:
         registry: ghcr.io
         username: ${{ github.actor }}
-        password: ${{ secrets.GITHUB_TOKEN }}
+        password: ${{ inputs.GITHUB_TOKEN }}
 
     - name: Build and push image
       shell: bash
