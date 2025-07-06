@@ -1,126 +1,41 @@
-export function secret(key) {
-  return `__secret:${key}__`;
+import { getVolumes } from './common.js';
+
+function compileServices(services, databaseConfig) {
+  if (typeof services == "function") {
+    return services(databaseConfig);
+  }
+
+  return services;
 }
 
-export function defineService({
-  name,
-  type,
-  dockerfile,
-  port,
-  env,
-  volumes,
-  migrate,
-  nginx,
-  path,
-  image
-}) {
+/**
+ * @typedef {Object} AppDefinition
+ * @property {string} domain
+ * @property {(dbConfiguration: import('./databases.js').DatabaseConfiguration) => import('./services.js').ServiceDefinition[] | import('./services.js').ServiceDefinition[]} services
+ * @property {string} containerRegistry
+ * @property {import('./databases.js').DatabaseAdapter} [database]
+ * @property {boolean} [autoSSL]
+ * @property {string} [tag]
+ */
 
-  return {
-    image,
-    name,
-    type,
-    volumes,
-    dockerfile,
-    env,
-    migrate,
-    nginx,
-    path,
-    port,
-  };
-}
-
-export const ROOT_DOMAIN = "";
-
-let volumes = [];
-
-export function volume(name, path) {
-  volumes.push(name);
-  return `${name}:${path}`;
-}
-
+/**
+ * @param {AppDefinition} param0 
+ * @returns 
+ */
 export function defineApp({ domain, services, containerRegistry, database, tag, autoSSL }) {
-  autoSSL ??= false;
+  if (!containerRegistry) throw new Error("Container registry needs to be set.");
+
   return {
-    tag,
+    tag: tag ?? "latest",
     domain,
-    services: [database.service, ...(typeof services == "function" ? services(database.dbConfiguration) : [services])].filter(c => !!c),
+    services: [
+      database?.service,
+      ...compileServices(services, database.config),
+    ].filter((c) => !!c),
     containerRegistry,
-    volumes,
-    autoSSL,
+    volumes: getVolumes(),
+    autoSSL: autoSSL ?? false,
   };
-}
-
-export function postgresDB() {
-  const dbConfiguration = {
-    host: "db",
-    port: 5432,
-    database: "main",
-    user: "database_user",
-    password: secret("db"),
-  };
-
-  const service = defineService({
-    name: dbConfiguration.host,
-    type: "docker",
-    image: "postgres:16",
-    volumes: [
-      volume("psql_db_data", "/var/lib/postgresql/data")
-    ],
-    env: {
-      POSTGRES_USER: dbConfiguration.user,
-      POSTGRES_PASSWORD: dbConfiguration.password,
-      POSTGRES_DB: dbConfiguration.database,
-    },
-    backup: true,
-  });
-
-  return {
-    dbConfiguration,
-    service
-  };
-}
-
-export function mongoDB() {
-  const dbConfiguration = {
-    host: "db",
-    port: 27017,
-    database: "main",
-    user: "database_user",
-    password: secret("db"),
-  };
-  const service = defineService({
-    name: dbConfiguration.host,
-    type: "docker",
-    image: "mongo:6",
-    volumes: [
-      volume("mongo_db_data", "/data/db")
-    ],
-    env: {
-      USER: dbConfiguration.user,
-      PASSWORD: dbConfiguration.password,
-      DATABASE: dbConfiguration.database,
-    },
-    backup: true,
-  });
-
-  return {
-    dbConfiguration,
-    service
-  };
-}
-
-export function flywayMigrations(db) {
-  return defineService({
-    name: "flyway",
-    type: "docker",
-    image: "flyway/flyway",
-    env: {
-      HOST: db.host,
-      USER: db.user,
-      PASSWORD: db.password,
-      DATABASE: db.database
-    }
-  });
 }
 
 export async function buildConfig(configPath) {
@@ -142,6 +57,8 @@ export async function buildConfig(configPath) {
     });
 }
 
-export function useGitHubRegistry(repository) {
-  return `ghcr.io/${repository}`;
-}
+export * from './common.js';
+export * from './databases.js';
+export * from './nginx.js';
+export * from './registries.js';
+export * from './services.js';

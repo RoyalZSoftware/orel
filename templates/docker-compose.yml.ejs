@@ -8,13 +8,13 @@ services:
     ports:
       - "<%= service.port %>:<%= service.port %>"
     <% } %>
-    <% if (service.volumes?.length) { %>
+    <% if (service.volumes?.length > 0) { %>
     volumes:
       <% service.volumes.forEach(volume => { %>
       - <%= volume %>
       <% }) %>
     <% } %>
-    <% if (service.env) { %>
+    <% if (service.env && Object.keys(service.env).length > 0) { %>
     environment:
       <% Object.entries(service.env).forEach(([key, val]) => { %>
         <% if (secretManager.isSecret(val)) { %>

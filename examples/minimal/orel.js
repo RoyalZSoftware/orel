@@ -1,4 +1,4 @@
-import { defineApp, defineService, postgresDB, useGitHubRegistry } from "../../dsl/index.js";
+import { defineApp, defineService, postgresDB, useGitHubRegistry } from "@royalzsoftware/orel";
 
 export default defineApp({
     domain: "example.royalzsoftware.de",

@@ -1,7 +1,6 @@
 import {
   defineApp,
   defineService,
-  flywayMigrations,
   mongoDB,
   useGitHubRegistry,
 } from "../dsl/index.js";
@@ -12,7 +11,6 @@ export default defineApp({
   containerRegistry: useGitHubRegistry("royalzsoftware/rebrandbox"),
   database: mongoDB(),
   services: (db) => ([
-    flywayMigrations(db),
     defineService({
       name: "api",
       type: "docker",

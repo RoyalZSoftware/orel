@@ -4,6 +4,7 @@ import pkg from '../package.json' with { type: 'json' };
 import { push } from "./commands/push.js";
 import { pull } from "./commands/pull.js";
 import { Config } from "../init/config.js";
+import { newProject } from "./commands/new.js";
 
 program
 .name("orel")
@@ -16,6 +17,14 @@ program
 .description("Initializes the server environment.")
 .action((str, options) => {
     initServer();
+});
+
+program
+.command('new')
+.description("Generates the template orel.config.js file along with the GitHub Actions workflow in the current working directory.")
+.action(async (str, options) => {
+    await newProject();
+    console.log("New project initialized successfully.")
 });
 
 program
@@ -33,9 +42,8 @@ program
 .command('push')
 .argument("host", "The host where to synchronize to")
 .description("Builds docker images for the services and pushes them to the registry.")
-.option("-c, --config <path>", "Path to the orel.js deployment configuration file.", "./orel.js")
+.option("-c, --config <path>", "Path to the orel.js deployment configuration file.", "./orel.config.js")
 .action(async (host, options) => {
-    console.log(options.config);
     return push(host, options);
 });
 

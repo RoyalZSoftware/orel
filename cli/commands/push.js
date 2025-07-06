@@ -3,8 +3,13 @@ import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
 import { buildAndPushImage } from "../../core/docker/builder.js";
 import { join, resolve } from "node:path";
-import { getConfig } from "../utils/getConfig.js";
 import { Config } from "../../init/config.js";
+import { buildConfig } from '../../dsl/index.js';
+
+const getConfig = async (options) => {
+  const configPath = resolve(process.cwd(), options.config);
+  return await buildConfig(configPath);
+};
 
 const sync = async (host, config) => {
   const configStr = JSON.stringify(config);
