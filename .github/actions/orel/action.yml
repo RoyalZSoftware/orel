@@ -26,7 +26,7 @@ runs:
     - name: Setup Node
       uses: actions/setup-node@v4
       with:
-        node-version: 18.20
+        node-version: 18.20.8
 
     - name: Setup Orel
       shell: bash
