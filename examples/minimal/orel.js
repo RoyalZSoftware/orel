@@ -31,7 +31,8 @@ export default defineApp({
                 subdomain: ""
             }
         })
-    ])
+    ]),
+    autoSSL: false,
 })
 
 // yt-dlp -f best -o - "https://www.youtube.com/watch?v=LtaLQJVY1BQ" | \ ffmpeg -i - -ss 00:01:23 -to 00:01:45 -c copy output.mp4
