@@ -38,13 +38,15 @@ export function volume(name, path) {
   return `${name}:${path}`;
 }
 
-export function defineApp({ domain, services, containerRegistry, database, tag }) {
+export function defineApp({ domain, services, containerRegistry, database, tag, autoSSL }) {
+  autoSSL ??= false;
   return {
     tag,
     domain,
     services: [database.service, ...(typeof services == "function" ? services(database.dbConfiguration) : [services])].filter(c => !!c),
     containerRegistry,
     volumes,
+    autoSSL,
   };
 }
 
