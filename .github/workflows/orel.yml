@@ -11,7 +11,7 @@ jobs:
         uses: actions/checkout@v3
 
       - name: Run orel
-        uses: royalzsoftware/orel/.github/actions/deploy@main
+        uses: royalzsoftware/orel/.github/actions/orel@main
         with:
           ssh_host: ${{secrets.SSH_HOST}}
           ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
