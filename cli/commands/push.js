@@ -42,7 +42,7 @@ export const push = async (host, options) => {
   for (const task of dockerTasks) {
     await buildAndPushImage(config.containerRegistry, task.name, config.tag, {
       cwd: join(resolve(process.cwd(), options.config), "..", task.path),
-      dockerfile: task.dockerfile,
+      dockerfile: join(resolve(process.cwd(), options.config), "..", task.dockerfile),
     });
   }
 };
