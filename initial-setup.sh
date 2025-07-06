@@ -1,31 +1,23 @@
 #!/bin/bash
 set -e
 
-# Install nvm (Node Version Manager)
-if ! command -v nvm &> /dev/null
-then
-  echo "Installing nvm..."
-  curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.5/install.sh | bash
+echo "Updating apt repositories..."
+sudo apt-get update
 
-  # Load nvm immediately for the script
-  export NVM_DIR="$HOME/.nvm"
-  # shellcheck source=/dev/null
-  [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"
-else
-  echo "nvm already installed."
-fi
+echo "Installing prerequisites..."
+sudo apt-get install -y curl
 
-# Install Node.js 18.10 and use it
-echo "Installing and using Node.js 18.10..."
-nvm install 18.10
-nvm use 18.10
+echo "Adding NodeSource Node.js 18.x repository..."
+curl -fsSL https://deb.nodesource.com/setup_18.x | sudo -E bash -
 
-# Verify node and npm version
-echo "Node version: $(node -v)"
-echo "NPM version: $(npm -v)"
+echo "Installing Node.js 18.x..."
+sudo apt-get install -y nodejs
 
-# Install your orel package globally
+echo "Checking node and npm versions..."
+node -v
+npm -v
+
 echo "Installing @royalzsoftware/orel globally..."
-npm install -g @royalzsoftware/orel
+sudo npm install -g @royalzsoftware/orel
 
-echo "Done."
+echo "Installation complete."
