@@ -57,5 +57,5 @@ runs:
       shell: bash
       run: |
         ssh -o StrictHostKeyChecking=no ${{ inputs.ssh_user }}@${{ inputs.ssh_host }} << EOF
-          sudo orel pull -c /home/${{ inputs.ssh_user }} -u ${{github.actor}} -p ${{inputs.github_token}}
+          sudo orel pull -c /home/${{ inputs.ssh_user }}/orel.json -u ${{github.actor}} -p ${{inputs.github_token}}
         EOF
