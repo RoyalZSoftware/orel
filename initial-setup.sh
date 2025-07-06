@@ -21,3 +21,5 @@ echo "Installing @royalzsoftware/orel globally..."
 sudo npm install -g @royalzsoftware/orel
 
 echo "Installation complete."
+
+orel init
