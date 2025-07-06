@@ -2,6 +2,13 @@
 
 Orel is a lightweight, configuration-driven deployment framework designed to securely and reliably deploy Node.js frontends and Java backends using a single docker-compose.yml on on-premise servers.
 
+
+## Install on Server
+
+```
+curl -sSL https://raw.githubusercontent.com/royalzsoftware/orel/master/initial-setup.sh | sudo bash
+```
+
 ## Core Use Cases & Features to Implement
 1. Initial Server Setup
 
