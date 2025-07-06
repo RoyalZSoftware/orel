@@ -1,0 +1,18 @@
+name: Deploy Orel example
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run orel
+        uses: royalzsoftware/orel/.github/actions/deploy@main
+        with:
+          ssh_host: ${{secrets.SSH_HOST}}
+          ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
+          orel_path: examples/minimal/orel.js
