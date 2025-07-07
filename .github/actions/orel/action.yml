@@ -32,7 +32,7 @@ runs:
       shell: bash
       run: |
         npm install
-        npx orel -V
+        orel -V
 
     - name: Set up SSH
       uses: webfactory/ssh-agent@v0.9.0
