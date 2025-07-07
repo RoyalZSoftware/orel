@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>ToDo List</title>
+</head>
+<body>
+    <h1>Welcome, {{ user.name }}</h1>
+    <form action="/add" method="post">
+        <input type="text" name="title" placeholder="Title" required>
+        <br>
+        <textarea name="description" placeholder="Description"></textarea>
+        <br>
+        <button type="submit">Add Todo</button>
+    </form>
+
+    <h2>Your Todos:</h2>
+    <ul>
+        {% for todo in todos %}
+        <li><strong>{{ todo.title }}</strong>: {{ todo.description }}</li>
+        {% endfor %}
+    </ul>
+    <a href="/logout">Logout</a>
+</body>
+</html>
