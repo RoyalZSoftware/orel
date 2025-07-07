@@ -32,6 +32,7 @@ runs:
       shell: bash
       run: |
         npm install
+        orel -V || npm i -g @royalzsoftware/orel
         orel -V
 
     - name: Set up SSH
