@@ -3,7 +3,7 @@ import { autoSSL, defineApp, exposedPort, exposedService, mongoDB, postgresDB, s
 export default defineApp({
     domain: "example.royalzsoftware.de",
     containerRegistry: useGitHubRegistry("royalzsoftware/orel"),
-    database: mongoDB(),
+    database: postgresDB(),
     services: (db) => ([
         exposedService({
             name: "api",
