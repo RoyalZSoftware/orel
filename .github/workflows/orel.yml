@@ -6,6 +6,7 @@ on:
 jobs:
   deploy:
     permissions:
+      contents: read
       packages: write
     runs-on: ubuntu-latest
     steps:
@@ -17,5 +18,5 @@ jobs:
         with:
           ssh_host: ${{secrets.SSH_HOST}}
           ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
-          orel_path: examples/minimal/orel.js
+          orel_path: examples/minimal/orel.config.js
           github_token: ${{secrets.GITHUB_TOKEN}}
