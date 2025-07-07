@@ -19,7 +19,7 @@ async function setupNginx() {
 export async function initServer() {
     ensureRootAccess();
     await setupDeployUser();
-    await setupSSH();
+    const {privateKey} = await setupSSH();
     await installDocker();
 
     await sh('echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections');
@@ -29,4 +29,7 @@ export async function initServer() {
     await sh('service docker restart');
 
     await setupNginx();
+
+    console.log("All done!! Please add the ssh private key for the deployer user to the GitHub Action secrets of your repository.");
+    console.log(privateKey);
 }

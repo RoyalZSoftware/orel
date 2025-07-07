@@ -45,7 +45,7 @@ export async function setupSSH() {
     // Datei existiert nicht, neu anlegen
     await sh(`echo '${publicKey}' | sudo tee ${authorizedKeysPath} > /dev/null`);
     await sh(`sudo chown ${username}:${username} ${authorizedKeysPath}`);
-    await sh(`sudo chmod 600 ${authorizedKeysPath}`);
+    await sh(`[ -f ${authorizedKeysPath} ] && sudo chmod 600 ${authorizedKeysPath}`);
   }
 
   return { publicKey, privateKey };
