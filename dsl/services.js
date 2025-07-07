@@ -111,7 +111,7 @@ export function useZitadel(domain, initialRootPassword = undefined) {
         ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: 'disable',
         ZITADEL_EXTERNALSECURE: true,
         ZITADEL_EXTERNALPORT: 443,
-        ZITADEL_SSL_ENABLED: false,
+        ZITADEL_TLS_ENABLED: false,
         ZITADEL_EXTERNALDOMAIN: "auth." + domain,
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME: "root",
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD: initialRootPassword ?? "RootPassword1!", // will need to be changed when signing in
