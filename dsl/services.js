@@ -91,7 +91,7 @@ export function exposedPort(containerPort, hostPort = undefined) {
  * @param {string | undefined} initialRootPassword if no initialRootPassword is given, then the default one will be used. Credentials username: `root@zitadel.localhost`. password: `RootPassword1!`
  * @returns 
  */
-export function useZitadel(initialRootPassword = undefined) {
+export function useZitadel(domain, initialRootPassword = undefined) {
   const postgres = postgresDB("zitadel_db", secret('zitadel_db_password'));
   return [
     exposedService({
@@ -109,7 +109,9 @@ export function useZitadel(initialRootPassword = undefined) {
         ZITADEL_DATABASE_POSTGRES_ADMIN_USERNAME: postgres.config.user,
         ZITADEL_DATABASE_POSTGRES_ADMIN_PASSWORD: postgres.config.password,
         ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: 'disable',
-        ZITADEL_EXTERNALSECURE: false,
+        ZITADEL_EXTERNALSECURE: true,
+        ZITADEL_EXTERNALPORT: 443,
+        ZITADEL_EXTERNALDOMAIN: "auth." + domain,
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME: "root",
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD: initialRootPassword ?? "RootPassword1!", // will need to be changed when signing in
         ZITADEL_MASTERKEY: secret('zitadel_master_key')

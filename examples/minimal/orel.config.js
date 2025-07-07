@@ -24,7 +24,7 @@ export default defineApp({
             dockerfile: "./frontend/dockerfile",
             path: "./frontend",
         }, SPA_ROUTING_ENABLED, true), // example.royalzsoftware.de
-        useZitadel(),
+        useZitadel("example.royalzsoftware.de"),
     ]),
     letsencryptConfig: autoSSL("panov@royalzsoftware.de"),
 })
