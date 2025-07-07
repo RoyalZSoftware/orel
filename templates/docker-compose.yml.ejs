@@ -4,9 +4,12 @@ services:
 <% for (const service of services) { -%>
   <%= service.name %>:
     image: <%= service.image %>
+    <% if (service.command) {%>
+    command: <%= service.command %>
+    <% } %>
     <% if (service.port) { %>
     ports:
-      - "<%= service.port %>:<%= service.port %>"
+      - "<%= service.port.host %>:<%= service.port.container %>"
     <% } %>
     <% if (service.volumes?.length > 0) { %>
     volumes:

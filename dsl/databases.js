@@ -16,13 +16,13 @@ import { secret, volume } from "./common.js";
  * @property {DatabaseConfiguration} config
  */
 
-export function postgresDB() {
+export function postgresDB(name = "postgres", _secret = secret("postgres_db")) {
   const config = {
-    host: "db",
+    host: name,
     port: 5432,
     database: "main",
     user: "database_user",
-    password: secret("db"),
+    password: _secret,
   };
 
   const service = internalService({
@@ -30,14 +30,13 @@ export function postgresDB() {
     type: "docker",
     image: "postgres:16",
     volumes: [
-      volume("psql_db_data", "/var/lib/postgresql/data")
+      volume(name + "_db_data", "/var/lib/postgresql/data")
     ],
     env: {
       POSTGRES_USER: config.user,
       POSTGRES_PASSWORD: config.password,
       POSTGRES_DB: config.database,
     },
-    backup: true,
   });
 
   return {
@@ -46,27 +45,26 @@ export function postgresDB() {
   };
 }
 
-export function mongoDB() {
+export function mongoDB(name = "mongodb", _secret = secret("mongo_db")) {
   const config = {
-    host: "db",
+    host: name,
     port: 27017,
     database: "main",
     user: "database_user",
-    password: secret("db"),
+    password: _secret,
   };
   const service = internalService({
     name: config.host,
     type: "docker",
     image: "mongo:6",
     volumes: [
-      volume("mongo_db_data", "/data/db")
+      volume(name + "_db_data", "/data/db")
     ],
     env: {
       USER: config.user,
       PASSWORD: config.password,
       DATABASE: config.database,
     },
-    backup: true,
   });
 
   return {

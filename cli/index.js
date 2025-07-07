@@ -5,11 +5,21 @@ import { push } from "./commands/push.js";
 import { pull } from "./commands/pull.js";
 import { Config } from "../init/config.js";
 import { newProject } from "./commands/new.js";
+import { renewOrCreateCertificates } from "./commands/certs.js";
 
 program
 .name("orel")
 .description("Opinionated deployment framework for fullstack applications to debian systems.")
 .version(pkg.version)
+
+// Developer tasks
+program
+.command('new')
+.description("Generates the template orel.config.js file along with the GitHub Actions workflow in the current working directory.")
+.action(async (str, options) => {
+    await newProject();
+    console.log("New project initialized successfully.")
+});
 
 // Server tasks
 program
@@ -19,12 +29,11 @@ program
     initServer();
 });
 
-program
-.command('new')
-.description("Generates the template orel.config.js file along with the GitHub Actions workflow in the current working directory.")
-.action(async (str, options) => {
-    await newProject();
-    console.log("New project initialized successfully.")
+program.command('certs')
+.description("Issue or renew latest SSL certificates")
+.option("-c, --config <path>", "Path to the orel.json deployment configuration file.", `/home/${Config.DEPLOYER_USERNAME}/orel.json`)
+.action(async (options) => {
+    return renewOrCreateCertificates(options);
 });
 
 program

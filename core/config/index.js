@@ -32,6 +32,13 @@ const cleaned = rendered
   console.log(`✅ Nginx config written to ${outputPath}`);
 }
 
+export async function stop() {
+  return sh('service nginx stop || true');
+}
+
+export async function start() {
+  return sh('service nginx start');
+}
 
 export async function restart() {
     return sh('service nginx restart || true');

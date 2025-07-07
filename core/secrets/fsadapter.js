@@ -4,7 +4,7 @@ import { join } from "node:path";
 import { randomBytes } from "node:crypto";
 
 const makeSecret = () => {
-  return randomBytes(24).toString("hex");
+  return randomBytes(16).toString("hex");
 };
 
 function generateSecret(basePath, key) {

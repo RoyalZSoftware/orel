@@ -24,7 +24,7 @@ export async function initServer() {
 
     await sh('echo iptables-persistent iptables-persistent/autosave_v4 boolean true | sudo debconf-set-selections');
     await sh('echo iptables-persistent iptables-persistent/autosave_v6 boolean true | sudo debconf-set-selections');
-    await installApt("nginx", "iptables-persistent");
+    await installApt("nginx", "iptables-persistent", "certbot");
     await configureFirewall();
     await sh('service docker restart');
 

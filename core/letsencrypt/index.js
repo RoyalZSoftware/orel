@@ -1,4 +1,5 @@
 import { spawn } from 'child_process';
+import { stop, start } from '../config/index.js';
 
 /**
  * Runs a Certbot command with arguments.
@@ -30,9 +31,11 @@ function runCertbotCommand(args) {
 export async function requestCertificates({ domains, email, staging = false }) {
   if (!domains || domains.length === 0) throw new Error('At least one domain is required');
 
+  await stop();
+
   const args = [
     'certonly',
-    '--nginx',
+    '--standalone',
     '--non-interactive',
     '--agree-tos',
     '--email', email,
@@ -42,12 +45,12 @@ export async function requestCertificates({ domains, email, staging = false }) {
     args.push('--staging');
   }
 
-  domains.forEach((domain) => {
-    args.push('-d', domain);
-  });
-
-  console.log(`🔐 Requesting SSL certificates for: ${domains.join(', ')}`);
-  return runCertbotCommand(args);
+  return Promise.all(domains.forEach((domain) => {
+    console.log(`🔐 Requesting SSL certificates for: ${domain}`);
+    return runCertbotCommand([...args, '-d', domain]).catch((err) => {
+      console.error(err);
+    });
+  })).then(() => start());
 }
 
 /**

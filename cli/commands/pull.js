@@ -1,27 +1,13 @@
 import { existsSync, readFileSync } from "node:fs";
-import { requestCertificates } from "../../core/letsencrypt/index.js";
 import { pullImage } from "../../core/docker/builder.js";
 import { down, generateComposeFile, login, up } from "../../core/docker/compose.js";
 import { Config } from "../../init/config.js";
-import { generateNginxConfig, restart } from "../../core/config/index.js";
+import { generateNginxConfig, start, stop } from "../../core/config/index.js";
 import { join, resolve } from "node:path";
 import { FSSecretManager } from "../../core/secrets/fsadapter.js";
 import { ensureRootAccess } from "../../init/system.js";
 import { sh } from "../../core/utils/sh.js";
-
-const getCertificates = async (config) => {
-  const domain = config.domain;
-  const subdomains = config.services
-    .map((c) => c.nginx?.subdomain)
-    .filter((c) => !!c);
-
-  const domains = [domain, ...subdomains.map((c) => c + "." + domain)];
-
-  return requestCertificates({
-    domains,
-    email: "panov@royalzsoftware.de",
-  });
-};
+import { renewOrCreateCertificates } from "./certs.js";
 
 export const pull = async (options) => {
   ensureRootAccess();
@@ -55,7 +41,9 @@ export const pull = async (options) => {
 
   await generateComposeFile(config, resolve(Config.DOCKER_COMPOSE_FILE));
   await generateNginxConfig(config, resolve(Config.NGINX_CONFIG_FILE));
-  await restart()
+  await stop();
+  await renewOrCreateCertificates(options);
+  await start();
 
   const orelPath = join(resolve(Config.DOCKER_COMPOSE_FILE), "..");
   await sh(`chown -R root ${orelPath}`);

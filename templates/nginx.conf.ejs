@@ -1,4 +1,4 @@
-<% if (app.autoSSL == true) { %>
+<% if (app.letsencryptConfig == true) { %>
 # Redirect all traffic to HTTPS
 server {
   listen 80 default_server;
@@ -9,20 +9,20 @@ server {
 
 <% app.services.filter(c => !!c.nginx?.subdomain || c.nginx?.subdomain == "").forEach((service, n) => { %>
 server {
-  listen <%= app.autoSSL ? "443 ssl" : "80" %>;
+  listen <%= app.letsencryptConfig ? "443 ssl" : "80" %>;
   <% if (service.nginx.subdomain != "") {%>
   server_name <%= service.nginx.subdomain %>.<%= app.domain %>;
   <% } else { %>
   server_name <%= app.domain %>;
   <% } %>
 
-  <% if (app.autoSSL) { %>
-  ssl_certificate /etc/letsencrypt/live/<%= service.subdomain %>.<%= app.domain %>/fullchain.pem;
-  ssl_certificate_key /etc/letsencrypt/live/<%= service.subdomain %>.<%= app.domain %>/privkey.pem;
+  <% if (app.letsencryptConfig) { %>
+  ssl_certificate /etc/letsencrypt/live/<%= service.nginx?.subdomain ? service.nginx.subdomain + "." : "" %><%= app.domain %>/fullchain.pem;
+  ssl_certificate_key /etc/letsencrypt/live/<%= service.nginx?.subdomain ? service.nginx.subdomain + "." : "" %><%= app.domain %>/privkey.pem;
   <% } %>
 
   location / {
-    proxy_pass http://localhost:<%= service.port %>;
+    proxy_pass http://localhost:<%= service.port.host %>;
     proxy_set_header Host $host;
     proxy_set_header X-Real-IP $remote_addr;
   }
