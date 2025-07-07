@@ -98,7 +98,7 @@ export function useZitadel(domain, initialRootPassword = undefined) {
       name: "auth",
       port: exposedPort(8080),
       image: "ghcr.io/zitadel/zitadel:latest",
-      command: `start-from-init --masterkeyFromEnv --tlsMode disabled`,
+      command: `start-from-init --masterkeyFromEnv`,
       env: {
         ZITADEL_DATABASE_POSTGRES_HOST: postgres.config.host,
         ZITADEL_DATABASE_POSTGRES_PORT: postgres.config.port,
@@ -111,6 +111,7 @@ export function useZitadel(domain, initialRootPassword = undefined) {
         ZITADEL_DATABASE_POSTGRES_ADMIN_SSL_MODE: 'disable',
         ZITADEL_EXTERNALSECURE: true,
         ZITADEL_EXTERNALPORT: 443,
+        ZITADEL_SSL_ENABLED: false,
         ZITADEL_EXTERNALDOMAIN: "auth." + domain,
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_USERNAME: "root",
         ZITADEL_FIRSTINSTANCE_ORG_HUMAN_PASSWORD: initialRootPassword ?? "RootPassword1!", // will need to be changed when signing in
