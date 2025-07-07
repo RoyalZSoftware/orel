@@ -45,12 +45,12 @@ export async function requestCertificates({ domains, email, staging = false }) {
     args.push('--staging');
   }
 
-  return Promise.all(domains.forEach((domain) => {
-    console.log(`🔐 Requesting SSL certificates for: ${domain}`);
-    return runCertbotCommand([...args, '-d', domain]).catch((err) => {
+  for (const domain of domains) {
+    await runCertbotCommand([...args, '-d', domain]).catch((err) => {
       console.error(err);
     });
-  })).then(() => start());
+  }
+  await start();
 }
 
 /**
