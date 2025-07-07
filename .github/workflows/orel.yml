@@ -19,5 +19,5 @@ jobs:
           ssh_host: ${{secrets.SSH_HOST}}
           ssh_private_key: ${{secrets.SSH_PRIVATE_KEY}}
           orel_path: orel.config.js
-          cwd: examples/todo-app-with-oauth2
+          working-directory: ./examples/todo-app-with-oauth2
           github_token: ${{secrets.GITHUB_TOKEN}}
