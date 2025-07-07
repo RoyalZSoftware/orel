@@ -1,4 +1,4 @@
-import { autoSSL, defineApp, exposedPort, exposedService, postgresDB, secret, useGitHubRegistry} from '@royalzsoftware/orel';
+import { autoSSL, defineApp, exposedPort, exposedService, postgresDB, secret, useGitHubRegistry, useZitadel} from '@royalzsoftware/orel';
 
 export default defineApp({
     database: postgresDB(),
