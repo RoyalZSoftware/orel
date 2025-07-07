@@ -1,6 +1,7 @@
 {
   "name": "todo-app-with-oauth2",
   "version": "1.0.0",
+  "type": "module",
   "main": "orel.config.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
