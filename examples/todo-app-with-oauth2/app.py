@@ -5,12 +5,15 @@ from sqlalchemy.orm import declarative_base, sessionmaker
 from authlib.integrations.flask_client import OAuth
 from dotenv import load_dotenv
 from authlib.common.security import generate_token
+from werkzeug.middleware.proxy_fix import ProxyFix
 
 load_dotenv()
 
 # Flask Setup
 app = Flask(__name__)
 app.secret_key = os.getenv("SECRET_KEY")
+
+app.wsgi_app = ProxyFix(app.wsgi_app, x_proto=1)
 
 # OAuth/Zitadel Setup
 oauth = OAuth(app)
