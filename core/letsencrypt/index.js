@@ -31,8 +31,6 @@ function runCertbotCommand(args) {
 export async function requestCertificates({ domains, email, staging = false }) {
   if (!domains || domains.length === 0) throw new Error('At least one domain is required');
 
-  await stop();
-
   const args = [
     'certonly',
     '--standalone',
@@ -45,18 +43,17 @@ export async function requestCertificates({ domains, email, staging = false }) {
     args.push('--staging');
   }
 
+  const validDomains = [];
+
   for (const domain of domains) {
-    await runCertbotCommand([...args, '-d', domain]).catch((err) => {
+    await runCertbotCommand([...args, '-d', domain])
+    .then(() => {
+      validDomains.push(domain);
+    })
+    .catch((err) => {
       console.error(err);
     });
   }
-  await start();
-}
 
-/**
- * Renew certificates manually (if needed)
- */
-export async function renewCertificates() {
-  console.log('🔄 Renewing SSL certificates...');
-  await runCertbotCommand(['renew']);
+  return validDomains;
 }

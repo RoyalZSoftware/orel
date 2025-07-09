@@ -1,7 +1,6 @@
 import { existsSync, readFileSync } from "fs";
 import { requestCertificates } from "../../core/letsencrypt/index.js";
 import { resolve } from 'path';
-import { ensureRootAccess } from "../../init/system.js";
 
 /**
  * 
@@ -27,13 +26,11 @@ const getCertificates = async (config) => {
 };
 
 export async function renewOrCreateCertificates(options) {
-  ensureRootAccess();
   const configFile = resolve(process.cwd(), options.config);
   if (!existsSync(configFile)) {
     throw new Error("Config file not found. " + configFile);
   }
   const config = JSON.parse(readFileSync(configFile, { encoding: "utf8" }));
 
-  await getCertificates(config);
-
+  return getCertificates(config);
 }

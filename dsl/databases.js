@@ -1,5 +1,6 @@
+import { secret } from "./secret.js";
 import { internalService } from "./services.js";
-import { secret, volume } from "./common.js";
+import { volume } from "./volumes.js";
 
 /**
  * @typedef {Object} DatabaseConfiguration

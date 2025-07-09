@@ -6,6 +6,7 @@ import { pull } from "./commands/pull.js";
 import { Config } from "../init/config.js";
 import { newProject } from "./commands/new.js";
 import { renewOrCreateCertificates } from "./commands/certs.js";
+import { ensureRootAccess } from "./common/index.js";
 
 program
 .name("orel")
@@ -26,13 +27,15 @@ program
 .command('init')
 .description("Initializes the server environment.")
 .action((str, options) => {
-    initServer();
+    ensureRootAccess();
+    return initServer();
 });
 
 program.command('certs')
 .description("Issue or renew latest SSL certificates")
 .option("-c, --config <path>", "Path to the orel.json deployment configuration file.", `/home/${Config.DEPLOYER_USERNAME}/orel.json`)
 .action(async (options) => {
+    ensureRootAccess();
     return renewOrCreateCertificates(options);
 });
 
@@ -43,6 +46,7 @@ program
 .option("-u, --username <username>", "Docker username")
 .option("-p, --password <password>", "Docker password")
 .action(async (options) => {
+    ensureRootAccess();
     return pull(options);
 });
 

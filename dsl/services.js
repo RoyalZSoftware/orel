@@ -4,7 +4,7 @@
  * @property {number} container
  */
 
-import { secret } from "./common.js";
+import { secret } from "./secret.js";
 import { postgresDB } from "./databases.js";
 
 /**
@@ -120,4 +120,12 @@ export function useZitadel(domain, initialRootPassword = undefined) {
     }),
     postgres.service,
   ];
+}
+
+export function useZentry() {
+  return exposedService({
+    name: "zentry",
+    image: "royalzsoftware/zentry:latest",
+    port: exposedPort(8080),
+  });
 }

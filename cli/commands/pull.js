@@ -1,19 +1,17 @@
 import { existsSync, readFileSync } from "node:fs";
+import { pullImage, down, Nginx, generateNginxConfig, FSSecretManager } from "../../core/index.js";
 import { pullImage } from "../../core/docker/builder.js";
-import { down, generateComposeFile, login, up } from "../../core/docker/compose.js";
-import { Config } from "../../init/config.js";
-import { generateNginxConfig, start, stop } from "../../core/config/index.js";
+import { down, generateComposeFile, login, up } from "../../core/docker/index.js";
+import { Config } from "../../config.js";
 import { join, resolve } from "node:path";
 import { FSSecretManager } from "../../core/secrets/fsadapter.js";
-import { ensureRootAccess } from "../../init/system.js";
-import { sh } from "../../core/utils/sh.js";
+import { sh } from "../../core/utils/index.js";
 import { renewOrCreateCertificates } from "./certs.js";
+import { ensureRootAccess } from "../common/index.js";
 
 export const pull = async (options) => {
   ensureRootAccess();
-  console.log(options.config);
   const configFile = resolve(process.cwd(), options.config);
-  console.log(configFile);
   if (!existsSync(configFile)) {
     throw new Error("Config file not found. " + configFile);
   }
@@ -34,21 +32,19 @@ export const pull = async (options) => {
     config.services.filter(c => !!c.dockerfile).map((c) => pullImage(config.containerRegistry, c.name, config.tag))
   );
 
-  console.log("Running down");
-  console.log(await down());
+  await down();
 
   await FSSecretManager(resolve(Config.FS_SECRET_STORE_PATH)).resolveSecrets(config);
-
   await generateComposeFile(config, resolve(Config.DOCKER_COMPOSE_FILE));
-  await generateNginxConfig(config, resolve(Config.NGINX_CONFIG_FILE));
-  await stop();
-  await renewOrCreateCertificates(options);
-  await start();
+
+  await Nginx.stop();
+  const sslEnabledDomains = await renewOrCreateCertificates(options);
+  await generateNginxConfig(config, resolve(Config.NGINX_CONFIG_FILE), sslEnabledDomains);
+  await Nginx.start();
 
   const orelPath = join(resolve(Config.DOCKER_COMPOSE_FILE), "..");
   await sh(`chown -R root ${orelPath}`);
   await sh(`chmod 700 ${orelPath}`);
 
-  console.log("Running up");
-  console.log(await up());
+  await up();
 };

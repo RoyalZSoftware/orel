@@ -1,7 +1,3 @@
-export function secret(key) {
-  return `__secret:${key}__`;
-}
-
 let volumes = [];
 
 export function volume(name, path) {

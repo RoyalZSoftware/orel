@@ -1,6 +1,6 @@
-import { getVolumes } from './common.js';
+export { letsencrypt } from './certificates.js';
+import { getVolumes } from './volumes.js';
 
-export {getVolumes, secret, volume} from './common.js';
 export {mongoDB, postgresDB} from './databases.js';
 export * from './nginx.js';
 export {useGitHubRegistry} from './registries.js';
@@ -13,23 +13,13 @@ function compileServices(services, databaseConfig) {
 
   return services;
 }
-
-/**
- * @typedef {Object} LetsEncryptConfiguration
- * @property {string} email
- */
-
-export function autoSSL(email) {
-  return {email};
-}
-
 /**
  * @typedef {Object} AppDefinition
  * @property {string} domain
  * @property {(dbConfiguration: import('./databases.js').DatabaseConfiguration) => import('./services.js').ServiceDefinition[] | import('./services.js').ServiceDefinition[]} services
  * @property {string} containerRegistry
  * @property {import('./databases.js').DatabaseAdapter} [database]
- * @property {LetsEncryptConfiguration} [letsencryptConfig]
+ * @property {import('./certificates.js').LetsEncryptConfiguration} [letsencryptConfig]
  * @property {string} [tag]
  */
 
