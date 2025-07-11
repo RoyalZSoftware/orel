@@ -4,6 +4,7 @@ import { getVolumes } from './volumes.js';
 export {mongoDB, postgresDB} from './databases.js';
 export {useGitHubRegistry} from './registries.js';
 export {SPA_ROUTING_DISBALED, SPA_ROUTING_ENABLED, exposedPort, exposedService, internalService, useZitadel} from './services.js';
+export * from './secret.js';
 
 function compileServices(services, databaseConfig) {
   if (typeof services == "function") {
