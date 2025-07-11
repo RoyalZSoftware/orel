@@ -8,6 +8,12 @@ import { secret } from "./secret.js";
 import { postgresDB } from "./databases.js";
 
 /**
+ * @typedef {Object} NginxConfiguration
+ * @property {string | null} subdomain
+ * @property {boolean} singlePageApplication
+ */
+
+/**
  * @typedef {Object} ServiceDefinitionBase
  * @property {string} name
  * @property {string} [dockerfile]

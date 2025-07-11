@@ -1,4 +1,4 @@
-import { autoSSL, defineApp, exposedPort, exposedService, mongoDB, postgresDB, secret, SPA_ROUTING_ENABLED, useGitHubRegistry, useZitadel, volume } from "../../dsl/index.js";
+import { autoSSL, defineApp, exposedPort, exposedService, postgresDB, SPA_ROUTING_ENABLED, useGitHubRegistry, useZitadel } from "@royalzsoftware/orel";
 
 export default defineApp({
     domain: "example.royalzsoftware.de",

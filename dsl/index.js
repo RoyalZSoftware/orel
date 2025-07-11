@@ -2,7 +2,6 @@ export { letsencrypt } from './certificates.js';
 import { getVolumes } from './volumes.js';
 
 export {mongoDB, postgresDB} from './databases.js';
-export * from './nginx.js';
 export {useGitHubRegistry} from './registries.js';
 export {SPA_ROUTING_DISBALED, SPA_ROUTING_ENABLED, exposedPort, exposedService, internalService, useZitadel} from './services.js';
 
