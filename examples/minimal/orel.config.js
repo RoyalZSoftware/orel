@@ -1,4 +1,4 @@
-import { autoSSL, defineApp, exposedPort, exposedService, postgresDB, SPA_ROUTING_ENABLED, useGitHubRegistry, useZitadel } from "@royalzsoftware/orel";
+import { letsencrypt, defineApp, exposedPort, exposedService, postgresDB, SPA_ROUTING_ENABLED, useGitHubRegistry, useZitadel } from "@royalzsoftware/orel";
 
 export default defineApp({
     domain: "example.royalzsoftware.de",
@@ -26,5 +26,5 @@ export default defineApp({
         }, SPA_ROUTING_ENABLED, true), // example.royalzsoftware.de
         useZitadel("example.royalzsoftware.de"),
     ]),
-    letsencryptConfig: autoSSL("panov@royalzsoftware.de"),
+    letsencryptConfig: letsencrypt("panov@royalzsoftware.de"),
 })

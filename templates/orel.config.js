@@ -7,12 +7,13 @@ import {
   secret,
   SPA_ROUTING_ENABLED,
   useGitHubRegistry,
+  letsencrypt,
 } from "@royalzsoftware/orel";
 
 export default defineApp({
   domain: "example.com",
   database: mongoDB(), // auto configure the database and access the credentials later. Secret is auto generated.
-  letsencryptConfig: autoSSL("panov@royalzsoftware.de"),
+  letsencryptConfig: letsencrypt("panov@royalzsoftware.de"),
   containerRegistry: useGitHubRegistry("royalzsoftware/orel"),
   services: (database) => ([
     exposedService({
