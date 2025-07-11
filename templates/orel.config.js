@@ -1,5 +1,6 @@
 import {
   defineApp,
+  exposedPort,
   exposedService,
   internalService,
   mongoDB,
@@ -11,12 +12,13 @@ import {
 export default defineApp({
   domain: "example.com",
   database: mongoDB(), // auto configure the database and access the credentials later. Secret is auto generated.
+  letsencryptConfig: autoSSL("panov@royalzsoftware.de"),
   containerRegistry: useGitHubRegistry("royalzsoftware/orel"),
-  services: (database) => [
+  services: (database) => ([
     exposedService({
       name: "api",
       path: "./backend", // provide the docker context where to build
-      port: 8002, // The port is only important for exposing it to the host. It won't be accessible directly, because of the iptables rules.
+      port: exposedPort(8000), // Provide the port that the server is running in the container (See the `EXPOSE` line in the Dockerfile)
       dockerfile: "./backend/dockerfile",
       env: {
         DB_HOST: database.host, // pass the database configuration from the adapter
@@ -34,10 +36,11 @@ export default defineApp({
       {
         name: "frontend",
         path: "./frontend",
-        port: 8001,
+        port: exposedPort(8000), // Provide the port that the server is running in the container (See the `EXPOSE` line in the Dockerfile)
         dockerfile: "./frontend/dockerfile",
       },
-      SPA_ROUTING_ENABLED // With this flag we rewrite all requests to the index.html file. Important for React, Angular, etc.
+      SPA_ROUTING_ENABLED, // With this flag we rewrite all requests to the index.html file. Important for React, Angular, etc.
+      true // isRootDomain? If yes, then don't use frontend.example.royalzsoftware.de. Rather use example.royalzsoftware.de
     ),
     internalService({
       /**
@@ -57,5 +60,5 @@ export default defineApp({
         SMTP_PASSWORD: secret("smtp_password"),
       },
     }),
-  ],
+  ]),
 });
