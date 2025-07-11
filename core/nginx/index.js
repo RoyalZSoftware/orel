@@ -18,16 +18,8 @@ export async function generateNginxConfig(appConfig, outputPath, sslEnabledDomai
   // Load template
   const template = await readFile(templatePath, "utf-8");
   
-  const subDomainsWithSSL = sslEnabledDomains.map(c => {
-    const parts = c.split('.')
-    if (parts.length == 2) {
-      return ""; // Apex Domain
-    }
-    return parts[0];
-  });
-
   const services = appConfig.services.filter(c => c.nginx?.subdomain != undefined).map((service) => {
-    service.hasSSL = subDomainsWithSSL.includes(service.nginx.subdomain);
+    service.hasSSL = sslEnabledDomains.includes(service.nginx.subdomain == "" ? appConfig.domain : service.nginx.subdomain + "." + appConfig.domain);
     return service;
   })
 
