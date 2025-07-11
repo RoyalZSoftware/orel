@@ -26,7 +26,7 @@ export async function generateNginxConfig(appConfig, outputPath, sslEnabledDomai
     return parts[0];
   });
 
-  const services = appConfig.services.map((service) => {
+  const services = appConfig.services.filter(c => !!c.nginx?.subdomain).map((service) => {
     service.hasSSL = subDomainsWithSSL.includes(service.nginx.subdomain);
     return service;
   })
