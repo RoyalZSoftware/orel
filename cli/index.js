@@ -3,10 +3,13 @@ import { initServer } from "../init/setup.js";
 import pkg from '../package.json' with { type: 'json' };
 import { push } from "./commands/push.js";
 import { pull } from "./commands/pull.js";
-import { Config } from "../init/config.js";
+import { Config } from "../config.js";
 import { newProject } from "./commands/new.js";
 import { renewOrCreateCertificates } from "./commands/certs.js";
 import { ensureRootAccess } from "./common/index.js";
+import { join } from 'path';
+import { sh } from "../core/index.js";
+import { spawn } from "child_process";
 
 program
 .name("orel")
@@ -48,6 +51,16 @@ program
 .action(async (options) => {
     ensureRootAccess();
     return pull(options);
+});
+
+program.command('logs')
+.description("Investigate the logs of the project")
+.option("-f, --follow", "Follow the logs.")
+.action(async (options) => {
+    ensureRootAccess();
+    if (options.follow) {
+        spawn(`docker compose logs ${options.follow ? '-f' : ''}`, {cwd: join(Config.DOCKER_COMPOSE_FILE, ".."), stdio: "inherit"});
+    }
 });
 
 // CI tasks

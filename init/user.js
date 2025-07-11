@@ -20,3 +20,13 @@ export async function setupDeployUser() {
     )
   );
 }
+
+export async function setupOrelLogsGroupPermissions() {
+  return Promise.all(
+    [].map((c) =>
+      sh(
+        `echo '%orellogs ALL=(ALL) NOPASSWD: /usr/local/bin/orel logs *' | sudo tee /etc/sudoers.d/orel-logs`
+      )
+    )
+  );
+}
