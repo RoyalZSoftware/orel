@@ -6,10 +6,12 @@ import { pull } from "./commands/pull.js";
 import { Config } from "../config.js";
 import { newProject } from "./commands/new.js";
 import { renewOrCreateCertificates } from "./commands/certs.js";
-import { ensureRootAccess } from "./common/index.js";
-import { join } from 'path';
-import { sh } from "../core/index.js";
-import { spawn } from "child_process";
+
+function ensureRootAccess() {
+  if (process.getuid && process.getuid() !== 0) {
+    throw new Error("This command must be run as root or via sudo.");
+  }
+}
 
 program
 .name("orel")
@@ -58,6 +60,7 @@ program.command('logs')
 .option("-f, --follow", "Follow the logs.")
 .action(async (options) => {
     ensureRootAccess();
+    console.log("Coming soon. Use docker compose logs meanwhile.");
 });
 
 // CI tasks

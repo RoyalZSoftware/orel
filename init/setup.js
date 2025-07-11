@@ -1,5 +1,5 @@
 import path, { join } from "path";
-import { ensureRootAccess, sh } from "../core/index.js";
+import { sh } from "../core/index.js";
 import { configureFirewall } from "./firewall.js";
 import { setupSSH } from "./ssh.js";
 import { setupDeployUser } from "./user.js";
@@ -16,7 +16,6 @@ async function setupNginx() {
 }
 
 export async function initServer() {
-    ensureRootAccess();
     await sh(`groupadd orellogs`);
     await setupDeployUser();
     const {privateKey} = await setupSSH();

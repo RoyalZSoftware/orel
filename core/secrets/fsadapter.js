@@ -2,6 +2,7 @@ import { SecretManager } from "./manager.js";
 import { existsSync, mkdirSync, readdirSync, readFileSync, writeFileSync } from "node:fs";
 import { join } from "node:path";
 import { randomBytes } from "node:crypto";
+import { sh } from "../utils/index.js";
 
 const makeSecret = () => {
   return randomBytes(16).toString("hex");
@@ -29,5 +30,7 @@ async function secrets(basePath) {
 
 export const FSSecretManager = (basePath) => {
     mkdirSync(basePath, {recursive: true});
+    sh(`chown -R root ${basePath}`);
+    sh(`chmod 750 ${basePath}`);
     return new SecretManager({ getSecret: (key) => getSecret(basePath, key), secrets: () => secrets(basePath) })
 };

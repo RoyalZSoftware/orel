@@ -3,10 +3,8 @@ import { pullImage, down, Nginx, generateNginxConfig, FSSecretManager, generateC
 import { Config } from "../../config.js";
 import { join, resolve } from "node:path";
 import { renewOrCreateCertificates } from "./certs.js";
-import { ensureRootAccess } from "../common/index.js";
 
 export const pull = async (options) => {
-  ensureRootAccess();
   const configFile = resolve(process.cwd(), options.config);
   if (!existsSync(configFile)) {
     throw new Error("Config file not found. " + configFile);
