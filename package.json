@@ -1,6 +1,6 @@
 {
   "name": "@royalzsoftware/orel",
-  "version": "0.0.31-next.5",
+  "version": "0.0.31-next.6",
   "type": "module",
   "main": "index.js",
   "directories": {
