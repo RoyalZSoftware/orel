@@ -4,7 +4,6 @@ import path, { join, resolve } from "path";
 import ejs from "ejs";
 import { sh } from "../utils/index.js";
 import { Config } from "../../config.js";
-import { dockerImageName } from "./builder.js";
 import { FSSecretManager } from "../secrets/fsadapter.js";
 
 const __filename = fileURLToPath(import.meta.url);

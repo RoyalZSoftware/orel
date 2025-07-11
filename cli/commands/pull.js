@@ -1,11 +1,7 @@
 import { existsSync, readFileSync } from "node:fs";
-import { pullImage, down, Nginx, generateNginxConfig, FSSecretManager } from "../../core/index.js";
-import { pullImage } from "../../core/docker/builder.js";
-import { down, generateComposeFile, login, up } from "../../core/docker/index.js";
+import { pullImage, down, Nginx, generateNginxConfig, FSSecretManager, generateComposeFile, login, up, sh } from "../../core/index.js";
 import { Config } from "../../config.js";
 import { join, resolve } from "node:path";
-import { FSSecretManager } from "../../core/secrets/fsadapter.js";
-import { sh } from "../../core/utils/index.js";
 import { renewOrCreateCertificates } from "./certs.js";
 import { ensureRootAccess } from "../common/index.js";
 

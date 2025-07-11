@@ -1,7 +1,7 @@
 import { cpSync, existsSync, mkdirSync } from "fs";
 import path, { join } from "path";
 import { fileURLToPath } from "url";
-import { sh } from "../../core/utils/sh.js";
+import { sh } from "../../core/index.js";
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);

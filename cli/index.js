@@ -58,9 +58,6 @@ program.command('logs')
 .option("-f, --follow", "Follow the logs.")
 .action(async (options) => {
     ensureRootAccess();
-    if (options.follow) {
-        spawn(`docker compose logs ${options.follow ? '-f' : ''}`, {cwd: join(Config.DOCKER_COMPOSE_FILE, ".."), stdio: "inherit"});
-    }
 });
 
 // CI tasks

@@ -1,13 +1,11 @@
-import { sh } from "../core/utils/sh.js";
-import { Config } from "./config.js";
+import { sh } from "../core/index.js";
+import { Config } from "../config.js";
 
 const setupUser = async (username) => {
   await sh(`id -u ${username} || sudo useradd -m ${username}`);
 };
 
-const ALLOWED_CALLS_FOR_DEPLOY_USER = [
-  "/usr/bin/orel pull *",
-];
+const ALLOWED_CALLS_FOR_DEPLOY_USER = ["/usr/bin/orel pull *"];
 
 export async function setupDeployUser() {
   const username = Config.DEPLOYER_USERNAME;
@@ -22,11 +20,7 @@ export async function setupDeployUser() {
 }
 
 export async function setupOrelLogsGroupPermissions() {
-  return Promise.all(
-    [].map((c) =>
-      sh(
-        `echo '%orellogs ALL=(ALL) NOPASSWD: /usr/local/bin/orel logs *' | sudo tee /etc/sudoers.d/orel-logs`
-      )
-    )
+  return sh(
+    `echo '%orellogs ALL=(ALL) NOPASSWD: /usr/local/bin/orel logs *' | sudo tee /etc/sudoers.d/orel-logs`
   );
 }

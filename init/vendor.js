@@ -1,4 +1,4 @@
-import { sh } from "../core/utils/sh.js";
+import { sh } from "../core/index.js";
 
 export async function installDocker() {
   await sh(`which docker || curl -fsSL https://get.docker.com | sudo sh`);

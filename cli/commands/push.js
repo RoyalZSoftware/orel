@@ -1,10 +1,9 @@
-import { RemoteClient } from "../../core/ssh/remoteClient.js";
 import { writeFileSync } from "node:fs";
 import { tmpdir } from "node:os";
-import { buildAndPushImage } from "../../core/docker/builder.js";
 import { join, resolve } from "node:path";
-import { Config } from "../../init/config.js";
 import { buildConfig } from '../../dsl/index.js';
+import { RemoteClient, buildAndPushImage } from "../../core/index.js";
+import { Config } from "../../config.js";
 
 const getConfig = async (options) => {
   const configPath = resolve(process.cwd(), options.config);

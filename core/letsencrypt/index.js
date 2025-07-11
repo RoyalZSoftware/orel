@@ -1,5 +1,4 @@
 import { spawn } from 'child_process';
-import { stop, start } from '../config/index.js';
 
 /**
  * Runs a Certbot command with arguments.

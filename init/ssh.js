@@ -1,6 +1,6 @@
 import path from 'path';
-import { sh } from '../core/utils/sh.js';
-import { Config } from './config.js';
+import { sh } from '../core/index.js';
+import { Config } from '../config.js';
 
 /**
  * Erzeugt ein SSH-Keypair für den gegebenen Benutzer (z. B. deployfw),

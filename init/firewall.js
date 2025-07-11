@@ -1,4 +1,4 @@
-import { sh } from "../core/utils/sh.js";
+import { sh } from "../core/index.js";
 
 /**
  * Setzt eine sichere iptables Konfiguration für den Server.
