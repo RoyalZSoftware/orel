@@ -19,7 +19,7 @@ export async function generateNginxConfig(appConfig, outputPath, sslEnabledDomai
   const template = await readFile(templatePath, "utf-8");
   
   const subDomainsWithSSL = sslEnabledDomains.map(c => {
-    const parts = c.split('.')[0]
+    const parts = c.split('.')
     if (parts.length == 2) {
       return ""; // Apex Domain
     }
