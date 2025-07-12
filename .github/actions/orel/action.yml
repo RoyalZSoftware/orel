@@ -37,7 +37,7 @@ runs:
       working-directory: ${{inputs.working-directory}}
       run: |
         npm install
-        orel -V || npm i -g @royalzsoftware/orel@next
+        orel -V || npm i -g @royalzsoftware/orel
         orel -V
 
     - name: Set up SSH
